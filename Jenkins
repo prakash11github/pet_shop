@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage (git) {
+            steps {
+              git branch: 'main', credentialsId: 'prakash', url: 'https://github.com/prakash11github/pet_shop.git'
+            }
+        }    
+        stage (build) {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage (deploy) {
+            steps {
+               deploy adapters: [tomcat9(credentialsId: 'prakash', path: '', url: 'http://3.110.130.13:8081/')], contextPath: 'dog', war: '**/*.war'
+            }
+        }
+    }
+}    
